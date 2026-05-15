@@ -46,7 +46,16 @@
             <input type="password" id="masterPass" placeholder="Set a key..." onchange="saveMasterPass()">
             <hr>
             <h3>GitHub Integration</h3>
-            <p><small>Requires a GitHub <strong>Personal Access Token (PAT)</strong> with <code>repo</code> scope (or <code>public_repo</code> for public repos only). The token is stored only in memory and cleared on page reload.</small></p>
+            <p><small>Connect with a GitHub <strong>Personal Access Token (PAT)</strong> to publish a public association page via GitHub Pages. Only public info (name, purpose, contact, links) is ever published — member lists, meetings, and vault records stay in your browser only.</small></p>
+            <div class="info-box" style="margin-bottom: 12px; padding: 10px 14px; background: var(--secondary-bg, #f5f5f5); border-left: 3px solid var(--accent, #0969da); border-radius: 4px; font-size: 13px;">
+                <strong>How to get a token:</strong>
+                <ol style="margin: 6px 0 0 0; padding-left: 18px;">
+                    <li>Go to <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=Forenings+Tool" target="_blank" rel="noopener">GitHub → Settings → Tokens (classic)</a> — the link pre-selects the right scope.</li>
+                    <li>Make sure <strong>public_repo</strong> is checked under <em>repo</em>.</li>
+                    <li>Click <strong>Generate token</strong>, copy it, and paste it below.</li>
+                </ol>
+                <p style="margin: 6px 0 0 0; color: var(--muted, #666);">The token is held in memory only and cleared when you reload the page — it is never saved to disk.</p>
+            </div>
             <div class="flex-row" style="align-items: flex-end;">
                 <div style="flex:1">
                     <label for="githubTokenInput">GitHub PAT</label>
@@ -412,7 +421,11 @@
             <input type="text" id="ghRepoName" placeholder="my-association">
             <label for="ghOrgName">Organization (leave blank for personal)</label>
             <input type="text" id="ghOrgName" placeholder="Optional: org-name">
-            <p><small>After connecting, GitHub Pages will be enabled automatically. It may take a minute to activate at <code>https://&lt;owner&gt;.github.io/&lt;repo&gt;/</code></small></p>
+            <div style="margin: 12px 0; padding: 10px 14px; background: var(--secondary-bg, #f5f5f5); border-left: 3px solid #2da44e; border-radius: 4px; font-size: 13px;">
+                <strong>What gets published:</strong> Only public association info — name, purpose, contact, and links.<br>
+                <strong>What stays private:</strong> Member list, meeting protocols, decisions, votes, and vault records are never uploaded.
+            </div>
+            <p><small>GitHub Pages will be enabled automatically. It may take a minute to activate at <code>https://&lt;owner&gt;.github.io/&lt;repo&gt;/</code></small></p>
             <div class="flex-row">
                 <button id="ghSetupConfirmBtn" onclick="connectAssocToGitHub()">Confirm</button>
                 <button class="secondary" onclick="closeGitHubSetup()">Cancel</button>
