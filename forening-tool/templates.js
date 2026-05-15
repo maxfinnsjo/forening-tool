@@ -2,12 +2,26 @@ function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substring(2);
 }
 
-function createAssociationTemplate(name, purpose, members, contact = "", links = [], badge = "") {
+function escapeHTML(str) {
+    if (!str) return "";
+    const p = document.createElement("p");
+    p.textContent = str;
+    return p.innerHTML;
+}
+
+function safeUrl(url) {
+    if (!url) return "#";
+    const trimmed = url.trim();
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    return "#";
+}
+
+function createAssociationTemplate(name, purpose, members, contact = "", links = [], badge = "", type = "ideell") {
     const now = new Date().toISOString();
     return {
         id: generateId(),
         name: name,
-        type: "ideell",
+        type: type,
         purpose: purpose,
         contact: contact,
         links: links,
@@ -129,7 +143,7 @@ function generatePublicDataSnapshot(assoc) {
 }
 
 function generatePublicSite(assoc) {
-const linksList = (assoc.links || []).map(l => `<li><a href="${l}">${l}</a></li>`).join('');
+const linksList = (assoc.links || []).map(l => `<li><a href="${safeUrl(l)}" rel="noopener noreferrer">${escapeHTML(l)}</a></li>`).join('');
 
 // Calculate last active date by finding the latest timestamp
 const dates = [assoc.created, assoc.lastModified];
@@ -147,7 +161,7 @@ return `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${assoc.name} - Information</title>
+<title>${escapeHTML(assoc.name)} - Information</title>
 <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: #fdfdfd; }
     header { border-bottom: 2px solid #007bff; margin-bottom: 40px; padding-bottom: 20px; display: flex; gap: 30px; align-items: center; }
@@ -163,21 +177,21 @@ return `<!DOCTYPE html>
 </head>
 <body>
 <header>
-    <div class="badge">${assoc.badge || ""}</div>
+    <div class="badge">${escapeHTML(assoc.badge || "")}</div>
     <div>
-        <h1>${assoc.name}</h1>
+        <h1>${escapeHTML(assoc.name)}</h1>
         <p class="activity">Senast aktiv: ${lastActive}</p>
     </div>
 </header>
 
 <section>
     <h2>Vårt Ändamål</h2>
-    <p class="purpose">${assoc.purpose}</p>
+    <p class="purpose">${escapeHTML(assoc.purpose)}</p>
 </section>
 
 <section>
     <h2>Kontakt & Länkar</h2>
-    <p><strong>E-post/Kontakt:</strong> ${assoc.contact || "Ej angivet"}</p>
+    <p><strong>E-post/Kontakt:</strong> ${escapeHTML(assoc.contact || "Ej angivet")}</p>
     <ul>${linksList}</ul>
 </section>
 
