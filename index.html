@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,7 +42,7 @@
             </select>
             <hr>
             <h3>App Data</h3>
-            <label>Database Encryption Key (for editing Stadgar)</label>
+            <label>Database Encryption Key</label>
             <input type="password" id="masterPass" placeholder="Set a key..." onchange="saveMasterPass()">
             <hr>
             <h3>GitHub Integration</h3>
@@ -68,7 +68,15 @@
             <br><br>
             <label for="name">Association Name</label>
             <input type="text" id="name" placeholder="Association Name">
-            
+
+            <label for="assocType">Association Type</label>
+            <select id="assocType">
+                <option value="ideell">Ideell förening</option>
+                <option value="ekonomisk">Ekonomisk förening</option>
+                <option value="samfällighet">Samfällighetsförening</option>
+                <option value="other">Other</option>
+            </select>
+
             <label for="purpose">Description / Purpose</label>
             <textarea id="purpose" placeholder="Description and purpose of the association"></textarea>
             
@@ -111,9 +119,9 @@
     </div>
 
     <div id="dashboard" style="display:none;">
-        <div id="syncStatus" class="card" style="background: #fff3cd; border: 1px solid #ffeeba; display: none; padding: 10px 20px; margin-bottom: 20px;">
+        <div id="syncStatus" class="card sync-banner" style="display: none; padding: 10px 20px; margin-bottom: 20px;">
             <div class="flex-row space-between">
-                <span id="syncMessage" style="color: #856404; font-weight: bold;"></span>
+                <span id="syncMessage" style="font-weight: bold;"></span>
                 <button class="secondary" style="padding: 5px 10px; font-size: 12px;" onclick="createCheckpoint()">Mark as Seen / Create Checkpoint</button>
             </div>
         </div>
@@ -124,13 +132,15 @@
                 <button class="secondary" onclick="renderAssociationList()">Back to List</button>
             </div>
             
-            <div class="flex-row button-group" style="gap: 15px;">
-                <button onclick="openMemberModal()">Add Member</button>
-                <button onclick="viewBylaws()">View Bylaws (Stadgar)</button>
-                <button class="secondary" onclick="openVault()">🔒 Secure Vault</button>
-                <button onclick="exportPublicSite()">Generate Public Site</button>
-                <button onclick="exportData()">Export Data</button>
-                <button class="danger" onclick="resetAssociation()">Delete</button>
+            <div class="flex-row space-between" style="margin-top: 10px;">
+                <div class="flex-row button-group">
+                    <button onclick="openMemberModal()">Add Member</button>
+                    <button onclick="viewBylaws()">View Bylaws (Stadgar)</button>
+                    <button class="secondary" onclick="openVault()">🔒 Secure Vault</button>
+                    <button class="secondary" onclick="exportPublicSite()">Generate Public Site</button>
+                    <button class="secondary" onclick="exportData()">Export Data</button>
+                </div>
+                <button class="danger" onclick="resetAssociation()">Delete Association</button>
             </div>
         </div>
 
@@ -371,7 +381,17 @@
             <input type="email" id="mEmail" onkeydown="if(event.key==='Enter') document.getElementById('mAddress').focus()">
 
             <label for="mAddress">Physical Address</label>
-            <textarea id="mAddress" rows="2" onkeydown="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); saveMember(); }"></textarea>
+            <textarea id="mAddress" rows="2"></textarea>
+
+            <label for="mRole">Role</label>
+            <select id="mRole">
+                <option value="member">Member</option>
+                <option value="chair">Chair (Ordförande)</option>
+                <option value="treasurer">Treasurer (Kassör)</option>
+                <option value="secretary">Secretary (Sekreterare)</option>
+                <option value="auditor">Auditor (Revisor)</option>
+                <option value="substitute">Substitute (Suppleant)</option>
+            </select>
 
             <div class="flex-row">
                 <button onclick="saveMember()">Save Member</button>

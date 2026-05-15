@@ -86,9 +86,15 @@ function hideAll() {
     document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
 }
 
+function setNavActive(page) {
+    document.getElementById("navHome").classList.toggle("nav-active", page === "home");
+    document.getElementById("navSettings").classList.toggle("nav-active", page === "settings");
+}
+
 function showSettings(shouldNavigate = true) {
     if (shouldNavigate) return navigate("settings");
     hideAll();
+    setNavActive("settings");
     document.getElementById("settingsView").style.display = "block";
     document.getElementById("themeSelect").value = localStorage.getItem("theme") || "light";
     
@@ -126,10 +132,12 @@ function resetAllData() {
 function showCreateForm(shouldNavigate = true) {
     if (shouldNavigate) return navigate("create");
     hideAll();
+    setNavActive("");
     document.getElementById("createForm").style.display = "block";
     document.getElementById("navTitle").innerText = "New Association";
     
     document.getElementById("name").value = "";
+    document.getElementById("assocType").value = "ideell";
     document.getElementById("purpose").value = "";
     document.querySelectorAll(".member").forEach(i => i.value = "");
 }
@@ -143,6 +151,7 @@ async function renderAssociationList(shouldNavigate = true) {
 
     currentAssocId = null;
     hideAll();
+    setNavActive("home");
     document.getElementById("associationList").style.display = "block";
     document.getElementById("navTitle").innerText = "Association Hub";
 
@@ -170,6 +179,7 @@ function selectAssociation(id) {
 
 async function createAssociation() {
     const name = document.getElementById("name").value;
+    const assocType = document.getElementById("assocType").value;
     const purpose = document.getElementById("purpose").value;
     const contact = document.getElementById("contact").value;
     const linksRaw = document.getElementById("links").value;
@@ -193,7 +203,7 @@ async function createAssociation() {
         return;
     }
 
-    const newAssoc = createAssociationTemplate(name, purpose, members, contact, linksRaw.split('\n').filter(l=>l.trim()), badge);
+    const newAssoc = createAssociationTemplate(name, purpose, members, contact, linksRaw.split('\n').filter(l=>l.trim()), badge, assocType);
 
     // Automatically Seal Founding Protocol if Password exists
     if (sessionPassword) {
@@ -342,6 +352,7 @@ function renderDashboard(shouldNavigate = true) {
     }
 
     hideAll();
+    setNavActive("");
     document.getElementById("dashboard").style.display = "block";
     document.getElementById("navTitle").innerText = association.name;
     document.getElementById("assocName").innerText = association.name;
@@ -398,17 +409,20 @@ function renderDashboard(shouldNavigate = true) {
         revealMBtn.style.display = "none";
 
         mList.innerHTML = "";
+        if (association.members.length === 0) {
+            mList.innerHTML = "<li style='justify-content:center; color: var(--secondary-color); font-style: italic;'>No members yet. Add the first member above.</li>";
+        }
         association.members.forEach((m) => {
             const oldM = old ? old.members.find(x => x.id === m.id) : null;
             const isNew = old && !oldM;
             const isModified = oldM && m.lastModified !== oldM.lastModified;
             
             const li = document.createElement("li");
-            if (isNew || isModified) li.style.borderLeft = "4px solid #ffc107";
-            
+            if (isNew || isModified) li.style.borderLeft = "4px solid var(--highlight-border)";
+
             let statusBadge = "";
-            if (isNew) statusBadge = '<span class="badge" style="background:#ffc107;color:#000">NEW</span>';
-            else if (isModified) statusBadge = '<span class="badge" style="background:#17a2b8;color:#fff">EDITED</span>';
+            if (isNew) statusBadge = '<span class="badge" style="background:var(--badge-new-bg);color:var(--badge-new-text)">NEW</span>';
+            else if (isModified) statusBadge = '<span class="badge" style="background:var(--badge-edited-bg);color:var(--badge-edited-text)">EDITED</span>';
 
             li.innerHTML = `
                 <div class="flex-row" style="flex:1">
@@ -465,12 +479,12 @@ function renderDashboard(shouldNavigate = true) {
                 const isModified = oldM && m.lastModified !== oldM.lastModified;
 
                 const li = document.createElement("li");
-                if (isNew || isModified) li.style.borderLeft = "4px solid #ffc107";
+                if (isNew || isModified) li.style.borderLeft = "4px solid var(--highlight-border)";
                 li.style.cursor = "pointer";
 
                 let statusBadge = "";
-                if (isNew) statusBadge = '<span class="badge" style="background:#ffc107;color:#000">NEW</span>';
-                else if (isModified) statusBadge = '<span class="badge" style="background:#17a2b8;color:#fff">EDITED</span>';
+                if (isNew) statusBadge = '<span class="badge" style="background:var(--badge-new-bg);color:var(--badge-new-text)">NEW</span>';
+                else if (isModified) statusBadge = '<span class="badge" style="background:var(--badge-edited-bg);color:var(--badge-edited-text)">EDITED</span>';
 
                 li.innerHTML = `
                     <div style="flex:1" onclick="viewMeeting('${m.id}')">
@@ -593,6 +607,10 @@ function renderIdeas() {
     list.innerHTML = "";
     if (!association.ideas) association.ideas = [];
 
+    if (association.ideas.length === 0) {
+        list.innerHTML = "<li style='justify-content:center; color: var(--secondary-color); font-style: italic;'>No ideas yet. Add one below.</li>";
+    }
+
     association.ideas.forEach((idea, idx) => {
         const text = typeof idea === 'string' ? idea : idea.text;
         const created = idea.created ? new Date(idea.created).toLocaleDateString() : 'N/A';
@@ -602,10 +620,10 @@ function renderIdeas() {
         const isNew = old && (!oldIdea || (typeof oldIdea === 'string' ? oldIdea !== text : oldIdea.text !== text));
 
         const li = document.createElement("li");
-        if (isNew) li.style.borderLeft = "4px solid #ffc107";
+        if (isNew) li.style.borderLeft = "4px solid var(--highlight-border)";
         li.innerHTML = `
             <div style="flex:1">
-                <span>${escapeHTML(text)}</span> ${isNew ? '<span class="badge" style="background:#ffc107;color:#000">NEW</span>' : ''}<br>
+                <span>${escapeHTML(text)}</span> ${isNew ? '<span class="badge" style="background:var(--badge-new-bg);color:var(--badge-new-text)">NEW</span>' : ''}<br>
                 <small>Added: ${created}</small>
             </div>
             <div class="flex-row">
@@ -722,6 +740,7 @@ function openMemberModal() {
     document.getElementById("mPhone").value = "";
     document.getElementById("mEmail").value = "";
     document.getElementById("mAddress").value = "";
+    document.getElementById("mRole").value = "member";
     document.getElementById("memberModal").style.display = "block";
 }
 
@@ -735,12 +754,13 @@ async function saveMember() {
     const phone = document.getElementById("mPhone").value.trim();
     const email = document.getElementById("mEmail").value.trim();
     const address = document.getElementById("mAddress").value.trim();
-    
+    const role = document.getElementById("mRole").value;
+
     if (!firstName) return alert("First Name is required.");
 
     const now = new Date().toISOString();
     const association = getCurrentAssoc();
-    
+
     if (currentMemberId) {
         // Edit existing
         const m = association.members.find(m => m.id === currentMemberId);
@@ -750,6 +770,7 @@ async function saveMember() {
             m.phone = phone;
             m.email = email;
             m.address = address;
+            m.role = role;
             m.name = `${firstName} ${lastName}`.trim();
             m.lastModified = now;
         }
@@ -765,7 +786,7 @@ async function saveMember() {
             name: `${firstName} ${lastName}`.trim(),
             joined: now,
             lastModified: now,
-            role: "member"
+            role
         });
     }
 
@@ -788,6 +809,7 @@ function editMember(memberId) {
     document.getElementById("mPhone").value = m.phone || "";
     document.getElementById("mEmail").value = m.email || "";
     document.getElementById("mAddress").value = m.address || "";
+    document.getElementById("mRole").value = m.role || "member";
     document.getElementById("memberModal").style.display = "block";
 }
 
