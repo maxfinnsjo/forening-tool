@@ -153,7 +153,7 @@ async function renderAssociationList(shouldNavigate = true) {
     hideAll();
     setNavActive("home");
     document.getElementById("associationList").style.display = "block";
-    document.getElementById("navTitle").innerText = "Association Hub";
+    document.getElementById("navTitle").innerText = "Forening Tool";
 
     const list = document.getElementById("listContainer");
     list.innerHTML = "";

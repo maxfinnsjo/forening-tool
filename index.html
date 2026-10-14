@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,7 +51,7 @@
             <div class="info-box" style="margin-bottom: 12px; padding: 10px 14px; background: var(--secondary-bg, #f5f5f5); border-left: 3px solid var(--accent, #0969da); border-radius: 4px; font-size: 13px;">
                 <strong>How to get a token:</strong>
                 <ol style="margin: 6px 0 0 0; padding-left: 18px;">
-                    <li>Go to <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=Forenings+Tool" target="_blank" rel="noopener">GitHub → Settings → Tokens (classic)</a> — the link pre-selects the right scope.</li>
+                    <li>Go to <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=Forening+Tool" target="_blank" rel="noopener">GitHub → Settings → Tokens (classic)</a> — the link pre-selects the right scope.</li>
                     <li>Make sure <strong>public_repo</strong> is checked under <em>repo</em>.</li>
                     <li>Click <strong>Generate token</strong>, copy it, and paste it below.</li>
                 </ol>
@@ -150,7 +150,6 @@
                     <button class="secondary" onclick="exportPublicSite()">Generate Public Site</button>
                     <button class="secondary" onclick="exportData()">Export Data</button>
                 </div>
-                <button class="danger" onclick="resetAssociation()">Delete Association</button>
             </div>
         </div>
 
@@ -226,6 +225,10 @@
                 </div>
             </div>
         </div>
+
+        <div style="text-align: right; margin: 30px 0;">
+            <button class="danger" onclick="resetAssociation()">Delete Association</button>
+        </div>
     </div>
 
     <!-- Meeting Modal -->
@@ -298,12 +301,12 @@
 
     <div id="bylawsModal" class="modal">
         <div class="modal-content">
-            <h2>Stadgar (Bylaws)</h2>
+            <h2>Bylaws (Stadgar)</h2>
             <div id="bylawsDisplay">
                 <pre id="bylawsContent" style="white-space: pre-wrap; font-family: serif; line-height: 1.5; background: var(--bg-color); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);"></pre>
                 <div class="flex-row" style="margin-top: 15px;">
                     <button class="secondary" onclick="closeBylaws()">Close</button>
-                    <button onclick="prepareEditBylaws()">✏️ Edit Stadgar</button>
+                    <button onclick="prepareEditBylaws()">✏️ Edit Bylaws</button>
                     <button onclick="downloadBylaws()">Download as Text</button>
                 </div>
             </div>
