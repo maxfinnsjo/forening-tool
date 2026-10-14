@@ -1,8 +1,12 @@
-# Forening Tool — v2.0
+# Forening Tool
+
+Version 2.0
 
 A zero-dependency, browser-based SPA for managing Swedish associations (föreningar). Runs entirely client-side — no build step, no backend, no install.
 
-Open `forening-tool/index.html` directly in a browser.
+**Live demo:** [maxfinnsjo.github.io/forening-tool](https://maxfinnsjo.github.io/forening-tool/) · or open `index.html` directly in a browser. Your data stays in your browser.
+
+![An association dashboard with members, meetings and ideas](docs/dashboard.png)
 
 ---
 
@@ -26,14 +30,14 @@ Open `forening-tool/index.html` directly in a browser.
 No install needed. Open directly:
 
 ```
-forening-tool/index.html
+index.html
 ```
 
 Or serve locally:
 
 ```bash
 python3 -m http.server 8000
-# then open http://localhost:8000/forening-tool/
+# then open http://localhost:8000/
 ```
 
 ---
@@ -41,7 +45,7 @@ python3 -m http.server 8000
 ## Architecture
 
 ```
-forening-tool/
+.
 ├── index.html     — UI structure, all views and modals
 ├── app.js         — State, routing (#home, #create, #dashboard/:id, #settings), event handlers
 ├── github.js      — GitHub REST API wrappers (PAT-authenticated)
